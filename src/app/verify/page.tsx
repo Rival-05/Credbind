@@ -1,6 +1,5 @@
-import React from "react";
-import { Container } from "../components/container";
-import { VerifyForm } from "../components/verifyform";
+import { Container } from "@/components/common/Container";
+import { VerifyForm } from "@/components/verify/VerifyForm";
 
 export default function Verify() {
   return (

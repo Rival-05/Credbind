@@ -2,16 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import { usePathname } from "next/navigation";
 
-export const Navbar = () => {
+const links = [
+  { title: "Issue", href: "/issue" },
+  { title: "Verify", href: "/verify" },
+  { title: "Generate Keys", href: "/generatekeys" },
+];
+
+export function Navbar() {
   const pathname = usePathname();
-  const Links = [
-    { title: "Issue", href: "/issue" },
-    { title: "Verify", href: "/verify" },
-    { title: "Generate Keys", href: "/generatekeys" },
-  ];
+
   return (
     <div className="selection:bg-primary/20 relative z-10 mx-auto flex w-full max-w-5xl items-center justify-between px-2 py-2">
       {pathname === "/" ? (
@@ -30,12 +31,13 @@ export const Navbar = () => {
       )}
 
       <div className="flex items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10">
-        {Links.map((link, index) => {
+        {links.map((link) => {
           const isActive = pathname === link.href;
+
           if (isActive) {
             return (
               <span
-                key={index}
+                key={link.href}
                 className="relative text-xs font-medium tracking-normal text-neutral-50 sm:text-sm md:text-base"
               >
                 {link.title}
@@ -43,9 +45,10 @@ export const Navbar = () => {
               </span>
             );
           }
+
           return (
             <Link
-              key={index}
+              key={link.href}
               href={link.href}
               className="text-xs font-medium tracking-normal text-neutral-400 transition duration-300 hover:text-neutral-50 sm:text-sm md:text-base"
             >
@@ -67,4 +70,4 @@ export const Navbar = () => {
       </div>
     </div>
   );
-};
+}

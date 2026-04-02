@@ -1,7 +1,7 @@
-import { Cards } from "./components/cards";
-import { Container } from "./components/container";
-import { Hero } from "./components/hero";
-import { Steps } from "./components/steps";
+import { Cards } from "@/components/landing/Cards";
+import { Container } from "@/components/common/Container";
+import { Hero } from "@/components/landing/Hero";
+import { Steps } from "@/components/landing/Steps";
 
 export default function Home() {
   return (

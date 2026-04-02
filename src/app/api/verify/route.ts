@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { verifyCertificate } from "@/app/hashing/cryptoutils";
+import { verifyCertificate } from "@/lib/crypto";
 
 const GATEWAY = "https://gateway.pinata.cloud/ipfs";
 

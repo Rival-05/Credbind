@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { generateECDSAKeysBase64 } from "../hashing/keygenerate";
+import { Copy, Key, Sparkle } from "lucide-react";
+import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { Key, Copy, Sparkle } from "lucide-react";
+
+import { generateECDSAKeysBase64 } from "@/lib/keygenerate";
 
 export function Keys() {
   const [keys, setKeys] = useState({ privateKey: "", publicKey: "" });
@@ -9,14 +10,16 @@ export function Keys() {
 
   const handleGenerate = async () => {
     setLoading(true);
+
     try {
       const { b64privatekey, b64publickey } = await generateECDSAKeysBase64();
       setKeys({ privateKey: b64privatekey, publicKey: b64publickey });
       toast.success("Keys generated!");
     } catch {
       toast.error("Key generation failed.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleCopy = async (value: string, label: string) => {
@@ -39,6 +42,7 @@ export function Keys() {
         className="group relative flex cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-lg border border-zinc-500 px-4 py-1 transition-all duration-300 hover:shadow-[0_0_8px_#00000040] dark:border-zinc-700 dark:hover:shadow-[0_0_8px_#ffffff40]"
         onClick={handleGenerate}
         disabled={loading}
+        type="button"
       >
         <span className="text-sm sm:text-base">
           {loading ? "Generating..." : "Generate"}
@@ -67,11 +71,10 @@ export function Keys() {
                     value={value}
                   />
                   <button
-                    className={`cursor-pointer rounded-r-lg border border-l-0 border-neutral-600 bg-neutral-800 px-2 text-sm font-light tracking-tight text-neutral-200 hover:bg-neutral-900 hover:text-neutral-100 ${
-                      loading ? "cursor-not-allowed opacity-50" : ""
-                    }`}
+                    className={`cursor-pointer rounded-r-lg border border-l-0 border-neutral-600 bg-neutral-800 px-2 text-sm font-light tracking-tight text-neutral-200 hover:bg-neutral-900 hover:text-neutral-100 ${loading ? "cursor-not-allowed opacity-50" : ""}`}
                     style={{ paddingTop: "0.25rem", paddingBottom: "0.25rem" }}
                     onClick={() => handleCopy(value, label)}
+                    type="button"
                   >
                     <Copy className="h-4 w-4" />
                   </button>

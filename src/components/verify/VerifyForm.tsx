@@ -1,23 +1,24 @@
 "use client";
-import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+
 import { Key } from "lucide-react";
+import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+
+const fields = [
+  {
+    id: "certificateId",
+    label: "Certificate ID",
+    placeholder: "Enter your certificate CID.",
+  },
+  {
+    id: "publicKey",
+    label: "Public Key",
+    placeholder: "Enter your public key (Base64).",
+    icon: Key,
+  },
+] as const;
 
 export function VerifyForm() {
-  const fields = [
-    {
-      id: "certificateId",
-      label: "Certificate ID",
-      placeholder: "Enter your certificate CID.",
-    },
-    {
-      id: "publicKey",
-      label: "Public Key",
-      placeholder: "Enter your public key (Base64).",
-      icon: Key,
-    },
-  ];
-
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     certificateId: "",
@@ -57,8 +58,9 @@ export function VerifyForm() {
       toast.error("Certificate Verification Failed. Please try again.", {
         id: toastId,
       });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -73,6 +75,7 @@ export function VerifyForm() {
       >
         {fields.map((field) => {
           const Icon = field.icon;
+
           return (
             <div key={field.id} className="relative flex-1">
               {Icon && (
@@ -84,11 +87,9 @@ export function VerifyForm() {
               <input
                 id={field.id}
                 type="text"
-                value={formData[field.id as keyof typeof formData]}
+                value={formData[field.id]}
                 onChange={handleChange}
-                className={`w-full rounded-lg border border-neutral-600 px-3 py-2 text-sm font-light tracking-wide focus:outline-none sm:text-base ${
-                  Icon ? "pl-9" : ""
-                }`}
+                className={`w-full rounded-lg border border-neutral-600 px-3 py-2 text-sm font-light tracking-wide focus:outline-none sm:text-base ${Icon ? "pl-9" : ""}`}
                 placeholder={field.placeholder}
                 required
               />
@@ -98,9 +99,7 @@ export function VerifyForm() {
         <button
           type="submit"
           disabled={loading}
-          className={`cursor-pointer rounded-lg bg-neutral-200 px-4 py-2 text-sm font-medium tracking-wide text-neutral-800 transition-colors duration-300 text-shadow-xs hover:bg-neutral-400 hover:text-neutral-900 sm:px-6 sm:text-base ${
-            loading ? "cursor-not-allowed opacity-50" : ""
-          }`}
+          className={`cursor-pointer rounded-lg bg-neutral-200 px-4 py-2 text-sm font-medium tracking-wide text-neutral-800 transition-colors duration-300 text-shadow-xs hover:bg-neutral-400 hover:text-neutral-900 sm:px-6 sm:text-base ${loading ? "cursor-not-allowed opacity-50" : ""}`}
         >
           {loading ? "Verifying..." : "Verify"}
         </button>

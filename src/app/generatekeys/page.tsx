@@ -1,9 +1,8 @@
 "use client";
-import React from "react";
-import { Container } from "../components/container";
-import { Keys } from "../components/keys";
+import { Container } from "@/components/common/Container";
+import { Keys } from "@/components/keys/Keys";
 
-export default function Verify() {
+export default function GenerateKeys() {
   return (
     <div className="selection:bg-primary/20 relative mt-8 w-full">
       <div

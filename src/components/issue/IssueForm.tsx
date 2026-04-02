@@ -1,26 +1,37 @@
 "use client";
-import React, { useState } from "react";
+
 import { Key } from "lucide-react";
-import { signCertificate } from "../hashing/cryptoutils";
+import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
-export const Issueform = () => {
-  const fields = [
-    {
-      id: "privatekey",
-      label: "Private key",
-      placeholder: "Enter your private key.",
-      iconClass: "text-red-600/80",
-    },
-    {
-      id: "publickey",
-      label: "Public key",
-      placeholder: "Enter your public key.",
-      iconClass: "text-green-600/80",
-    },
-  ];
+import { signCertificate } from "@/lib/crypto";
 
-  const [formData, setFormData] = useState({
+type FormData = {
+  recipient: string;
+  title: string;
+  date: string;
+  details: string;
+  privatekey: string;
+  publickey: string;
+};
+
+const fields = [
+  {
+    id: "privatekey",
+    label: "Private key",
+    placeholder: "Enter your private key.",
+    iconClass: "text-red-600/80",
+  },
+  {
+    id: "publickey",
+    label: "Public key",
+    placeholder: "Enter your public key.",
+    iconClass: "text-green-600/80",
+  },
+] as const;
+
+export function IssueForm() {
+  const [formData, setFormData] = useState<FormData>({
     recipient: "",
     title: "",
     date: "",
@@ -28,8 +39,7 @@ export const Issueform = () => {
     privatekey: "",
     publickey: "",
   });
-
-  const [Loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [cid, setCid] = useState<string | null>(null);
 
   const handleChange = (
@@ -51,28 +61,25 @@ export const Issueform = () => {
       details: formData.details,
     };
 
-    const decodedPrivateKey = JSON.parse(atob(formData.privatekey));
-
     try {
+      const decodedPrivateKey = JSON.parse(atob(formData.privatekey));
       const signature = await signCertificate(
         issuingDetails,
         decodedPrivateKey,
       );
-      const certificateData = {
-        issuingDetails: issuingDetails,
-        Signature: signature,
-      };
 
       const res = await fetch("/api/issue", {
         method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify(certificateData),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          issuingDetails,
+          Signature: signature,
+        }),
       });
 
       if (!res.ok) throw new Error("Request failed");
 
       const data = await res.json();
-      console.log("Certificate issued successfully.", data);
       setCid(data.cid);
       toast.success("Certificate Issued Successfully!", { id: toastId });
     } catch (err) {
@@ -80,8 +87,9 @@ export const Issueform = () => {
       toast.error("Certificate could not be issued. Please try again later.", {
         id: toastId,
       });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -177,7 +185,7 @@ export const Issueform = () => {
               <input
                 type="text"
                 id={field.id}
-                value={formData[field.id as keyof typeof formData]}
+                value={formData[field.id]}
                 onChange={handleChange}
                 className="rounded-md border border-neutral-600 p-2 text-sm font-light tracking-wide focus:outline-none sm:text-base"
                 required
@@ -189,10 +197,10 @@ export const Issueform = () => {
 
         <button
           type="submit"
-          disabled={Loading}
-          className={`mt-4 cursor-pointer rounded-lg bg-neutral-200 px-4 py-2 text-sm font-medium tracking-wide text-neutral-800 transition-colors duration-300 hover:bg-neutral-400 hover:text-neutral-900 sm:px-6 sm:py-3 sm:text-base ${Loading ? "cursor-not-allowed opacity-50" : ""}`}
+          disabled={loading}
+          className={`mt-4 cursor-pointer rounded-lg bg-neutral-200 px-4 py-2 text-sm font-medium tracking-wide text-neutral-800 transition-colors duration-300 hover:bg-neutral-400 hover:text-neutral-900 sm:px-6 sm:py-3 sm:text-base ${loading ? "cursor-not-allowed opacity-50" : ""}`}
         >
-          {Loading ? "Issuing..." : "Issue Certificate"}
+          {loading ? "Issuing..." : "Issue Certificate"}
         </button>
         <Toaster position="bottom-right" />
       </form>
@@ -205,4 +213,4 @@ export const Issueform = () => {
       )}
     </div>
   );
-};
+}

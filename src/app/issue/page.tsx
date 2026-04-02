@@ -1,6 +1,5 @@
-import React from "react";
-import { Container } from "../components/container";
-import { Issueform } from "../components/issueform";
+import { Container } from "@/components/common/Container";
+import { IssueForm } from "@/components/issue/IssueForm";
 export default function Issue() {
   return (
     <div className="selection:bg-primary/20 relative w-full">
@@ -12,7 +11,7 @@ export default function Issue() {
         }}
       />
       <Container>
-        <Issueform />
+        <IssueForm />
       </Container>
     </div>
   );
