@@ -4,7 +4,14 @@ import { Key } from "lucide-react";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
-const fields = [
+type VerifyField = {
+  id: "certificateId" | "publicKey";
+  label: string;
+  placeholder: string;
+  icon?: typeof Key;
+};
+
+const fields: VerifyField[] = [
   {
     id: "certificateId",
     label: "Certificate ID",
@@ -16,7 +23,7 @@ const fields = [
     placeholder: "Enter your public key (Base64).",
     icon: Key,
   },
-] as const;
+];
 
 export function VerifyForm() {
   const [loading, setLoading] = useState(false);
@@ -65,7 +72,7 @@ export function VerifyForm() {
 
   return (
     <div className="mx-auto my-16 flex w-full max-w-4xl flex-col items-center justify-center rounded-lg p-6 shadow-md sm:my-20 sm:p-8">
-      <h2 className="mb-6 bg-gradient-to-b from-neutral-50 via-neutral-200 to-neutral-400 bg-clip-text text-center text-2xl font-semibold text-transparent sm:text-3xl md:text-4xl">
+      <h2 className="mb-6 bg-linear-to-b from-neutral-50 via-neutral-200 to-neutral-400 bg-clip-text text-center text-2xl font-semibold text-transparent sm:text-3xl md:text-4xl">
         Verify Certificate
       </h2>
 

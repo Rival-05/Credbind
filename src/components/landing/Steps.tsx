@@ -30,7 +30,7 @@ export function Steps() {
 
   return (
     <div id="steps" className="mt-10 px-4 py-12 sm:px-6 sm:py-16">
-      <h2 className="mb-10 bg-gradient-to-b from-neutral-50 to-neutral-300 bg-clip-text text-center text-2xl font-bold text-transparent sm:mb-12 sm:text-3xl md:text-4xl">
+      <h2 className="mb-10 bg-linear-to-b from-neutral-50 to-neutral-300 bg-clip-text text-center text-2xl font-bold text-transparent sm:mb-12 sm:text-3xl md:text-4xl">
         How It Works
       </h2>
       <div className="mx-auto grid max-w-6xl gap-8 sm:gap-10 md:grid-cols-3">
@@ -48,7 +48,7 @@ export function Steps() {
 
             {idx < 2 && (
               <svg
-                className={`absolute top-7 right-[-40px] hidden md:block ${animate ? "draw" : ""}`}
+                className={`absolute top-7 -right-10 hidden md:block ${animate ? "draw" : ""}`}
                 width="80"
                 height="20"
                 viewBox="0 0 100 20"

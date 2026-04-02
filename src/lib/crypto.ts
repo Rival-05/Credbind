@@ -19,8 +19,11 @@ function toHex(buffer: ArrayBuffer): string {
     .join("");
 }
 
-function hexToBytes(hex: string): Uint8Array {
-  return new Uint8Array(hex.match(/.{1,2}/g)?.map((byte) => Number.parseInt(byte, 16)) ?? []);
+function hexToBuffer(hex: string): ArrayBuffer {
+  const bytes = new Uint8Array(
+    hex.match(/.{1,2}/g)?.map((byte) => Number.parseInt(byte, 16)) ?? [],
+  );
+  return bytes.buffer;
 }
 
 async function signOrVerifyPayload(details: CertificateDetails) {
@@ -55,7 +58,7 @@ export async function verifyCertificate(
   return crypto.subtle.verify(
     { name: "ECDSA", hash: { name: "SHA-256" } },
     cryptoKey,
-    hexToBytes(signatureHex),
+    hexToBuffer(signatureHex),
     data,
   );
 }

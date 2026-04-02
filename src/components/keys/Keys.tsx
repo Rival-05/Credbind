@@ -51,7 +51,7 @@ export function Keys() {
           size={18}
           className="relative z-10 text-zinc-400 transition-all duration-300 group-hover:text-amber-400"
         />
-        <span className="absolute top-0 left-[-75%] h-full w-[200%] bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 transition-all duration-700 group-hover:translate-x-[100%] group-hover:opacity-100" />
+        <span className="absolute top-0 left-[-75%] h-full w-[200%] bg-linear-to-r from-transparent via-white/40 to-transparent opacity-0 transition-all duration-700 group-hover:translate-x-full group-hover:opacity-100" />
       </button>
       <Toaster position="top-center" />
       <div className="mt-10 flex w-full max-w-3xl flex-col items-center justify-center gap-1 sm:flex-row sm:gap-4">

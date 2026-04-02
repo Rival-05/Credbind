@@ -3,7 +3,7 @@ import Link from "next/link";
 export function Hero() {
   return (
     <div className="my-10 flex flex-col items-center justify-center gap-6 py-12 text-center">
-      <h1 className="max-w-3xl bg-gradient-to-b from-neutral-50 via-neutral-200 to-neutral-400 bg-clip-text text-3xl font-semibold tracking-tight text-transparent sm:text-4xl md:text-5xl lg:text-6xl">
+      <h1 className="max-w-3xl bg-linear-to-b from-neutral-50 via-neutral-200 to-neutral-400 bg-clip-text text-3xl font-semibold tracking-tight text-transparent sm:text-4xl md:text-5xl lg:text-6xl">
         Secure, Verifiable Certificates — Anywhere.
       </h1>
       <p className="text-sm font-light text-neutral-400 sm:text-base md:text-lg">
