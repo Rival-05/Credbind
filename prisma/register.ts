@@ -17,7 +17,7 @@ async function main() {
         "iitk.ac.in",
         "iitm.ac.in",
         "iitkgp.ac.in",
-        "juet.ac.in",
+        "juetguna.in",
         "vit.ac.in",
         "bits-pilani.ac.in",
     ];
