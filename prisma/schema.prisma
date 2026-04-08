@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum IssuerStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum CredentialStatus {
+  ACTIVE
+  REVOKED
+  EXPIRED
+  SUSPENDED
+}
+
+enum UserRole {
+  ISSUER
+  STUDENT
+}
+
+model Issuer {
+  id             String         @id @default(cuid())
+  orgName        String
+  email          String         @unique
+  domain         String
+  passwordHash   String
+  status         IssuerStatus   @default(PENDING)
+  issuerPublicKey String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  credentials    Credential[]
+  auditLogs      AuditLog[]
+}
+
+model Student {
+  id             String         @id @default(cuid())
+  name           String
+  email          String         @unique
+  enrollment     String         @unique
+  passwordHash   String
+  walletId       String         @unique
+  publicKey      String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  credentials    Credential[]
+  auditLogs      AuditLog[]
+}
+
+model Credential {
+  id             String           @id @default(cuid())
+  credentialId   String           @unique
+  cid            String           @unique
+  type           String
+  title          String?
+  status         CredentialStatus @default(ACTIVE)
+  issuedAt       DateTime         @default(now())
+  expiresAt      DateTime?
+  revokedAt      DateTime?
+
+  issuerId       String
+  studentId      String
+
+  issuer         Issuer           @relation(fields: [issuerId], references: [id], onDelete: Cascade)
+  student        Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  revocation     Revocation?
+
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@index([issuerId])
+  @@index([studentId])
+  @@index([cid])
+}
+
+model Revocation {
+  id             String       @id @default(cuid())
+  cid            String       @unique
+  reason         String
+  revokedAt      DateTime     @default(now())
+
+  credentialId   String       @unique
+  credential     Credential   @relation(fields: [credentialId], references: [id], onDelete: Cascade)
+}
+
+model DomainWhitelist {
+  id             String       @id @default(cuid())
+  domain         String       @unique
+  createdAt      DateTime     @default(now())
+}
+
+model AuditLog {
+  id             String       @id @default(cuid())
+  action         String
+  role           UserRole
+  actorIssuerId  String?
+  actorStudentId String?
+  metadata       Json?
+  createdAt      DateTime     @default(now())
+
+  issuer         Issuer?      @relation(fields: [actorIssuerId], references: [id], onDelete: Cascade)
+  student        Student?     @relation(fields: [actorStudentId], references: [id], onDelete: Cascade)
+
+  @@index([actorIssuerId])
+  @@index([actorStudentId])
+}
