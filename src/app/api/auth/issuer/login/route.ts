@@ -1,0 +1,101 @@
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
+export async function POST(req: NextRequest) {
+    try {
+        const body = await req.json();
+        const { email, password } = body;
+
+        // 1. Validate input
+        if (!email || !password) {
+            return NextResponse.json(
+                { success: false, message: "Email and password are required" },
+                { status: 400 }
+            );
+        }
+
+        const normalizedEmail = email.toLowerCase().trim();
+
+        // 2. Find issuer
+        const issuer = await prisma.issuer.findUnique({
+            where: { email: normalizedEmail },
+        });
+
+        if (!issuer) {
+            return NextResponse.json(
+                { success: false, message: "Invalid credentials" },
+                { status: 401 }
+            );
+        }
+
+        // 3. Compare password
+        const isPasswordValid = await bcrypt.compare(password, issuer.passwordHash);
+
+        if (!isPasswordValid) {
+            return NextResponse.json(
+                { success: false, message: "Invalid credentials" },
+                { status: 401 }
+            );
+        }
+
+        // 4. Check approval status
+        if (issuer.status !== "APPROVED") {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: "Your issuer account is not approved yet",
+                    status: issuer.status,
+                },
+                { status: 403 }
+            );
+        }
+
+        // 5. Generate JWT
+        const token = jwt.sign(
+            {
+                issuerId: issuer.id,
+                email: issuer.email,
+                role: "ISSUER",
+            },
+            process.env.JWT_SECRET!,
+            { expiresIn: "7d" }
+        );
+
+        // 6. Optional audit log
+        await prisma.auditLog.create({
+            data: {
+                action: "ISSUER_LOGIN",
+                role: "ISSUER",
+                actorIssuerId: issuer.id,
+                metadata: {
+                    email: issuer.email,
+                },
+            },
+        });
+
+        // 7. Return token
+        return NextResponse.json(
+            {
+                success: true,
+                message: "Login successful",
+                token,
+                issuer: {
+                    id: issuer.id,
+                    orgName: issuer.orgName,
+                    email: issuer.email,
+                    domain: issuer.domain,
+                    status: issuer.status,
+                },
+            },
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error("Issuer login error:", error);
+        return NextResponse.json(
+            { success: false, message: "Internal server error" },
+            { status: 500 }
+        );
+    }
+}

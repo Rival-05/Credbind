@@ -60,6 +60,7 @@ model Credential {
   cid            String           @unique
   type           String
   title          String?
+  payload        Json?
   status         CredentialStatus @default(ACTIVE)
   issuedAt       DateTime         @default(now())
   expiresAt      DateTime?

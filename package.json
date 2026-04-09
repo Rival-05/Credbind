@@ -17,6 +17,7 @@
     "elliptic": "^6.6.1",
     "geist": "^1.5.1",
     "idb": "^8.0.3",
+    "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.544.0",
     "next": "16.2.2",
     "pg": "^8.20.0",
@@ -27,6 +28,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
