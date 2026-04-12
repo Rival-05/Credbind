@@ -1,8 +1,14 @@
+"use client";
+
 import { Copy, Key, Sparkle } from "lucide-react";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
-import { generateECDSAKeysBase64 } from "@/lib/keygenerate";
+import {
+  exportPrivateKey,
+  exportPublicKey,
+  generateKeyPair,
+} from "@/lib/crypto";
 
 export function Keys() {
   const [keys, setKeys] = useState({ privateKey: "", publicKey: "" });
@@ -12,7 +18,9 @@ export function Keys() {
     setLoading(true);
 
     try {
-      const { b64privatekey, b64publickey } = await generateECDSAKeysBase64();
+      const { publicKey, privateKey } = await generateKeyPair();
+      const b64privatekey = await exportPrivateKey(privateKey);
+      const b64publickey = await exportPublicKey(publicKey);
       setKeys({ privateKey: b64privatekey, publicKey: b64publickey });
       toast.success("Keys generated!");
     } catch {
@@ -39,7 +47,7 @@ export function Keys() {
   return (
     <div className="relative mx-auto my-14 flex w-full max-w-4xl flex-col items-center justify-center p-6 shadow-md sm:my-20 sm:p-8">
       <button
-        className="group relative flex cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-lg border border-zinc-500 px-4 py-1 transition-all duration-300 hover:shadow-[0_0_8px_#00000040] dark:border-zinc-700 dark:hover:shadow-[0_0_8px_#ffffff40]"
+        className="group border-border bg-background hover:bg-muted relative flex cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-lg border px-4 py-1 transition-all duration-300"
         onClick={handleGenerate}
         disabled={loading}
         type="button"
@@ -49,9 +57,8 @@ export function Keys() {
         </span>
         <Sparkle
           size={18}
-          className="relative z-10 text-zinc-400 transition-all duration-300 group-hover:text-amber-400"
+          className="text-muted-foreground group-hover:text-primary relative z-10 transition-all duration-300"
         />
-        <span className="absolute top-0 left-[-75%] h-full w-[200%] bg-linear-to-r from-transparent via-white/40 to-transparent opacity-0 transition-all duration-700 group-hover:translate-x-full group-hover:opacity-100" />
       </button>
       <Toaster position="top-center" />
       <div className="mt-10 flex w-full max-w-3xl flex-col items-center justify-center gap-1 sm:flex-row sm:gap-4">
@@ -65,13 +72,13 @@ export function Keys() {
                 </div>
                 <div className="flex h-8 items-stretch gap-0">
                   <textarea
-                    className="cursor-default rounded-l-lg border border-r-0 border-neutral-600 px-2 py-1 text-sm font-light tracking-wide focus:outline-none sm:text-base"
+                    className="border-border bg-background text-foreground cursor-default rounded-l-lg border border-r-0 px-2 py-1 text-sm font-light tracking-wide focus:outline-none sm:text-base"
                     readOnly
                     rows={1}
                     value={value}
                   />
                   <button
-                    className={`cursor-pointer rounded-r-lg border border-l-0 border-neutral-600 bg-neutral-800 px-2 text-sm font-light tracking-tight text-neutral-200 hover:bg-neutral-900 hover:text-neutral-100 ${loading ? "cursor-not-allowed opacity-50" : ""}`}
+                    className={`border-border bg-secondary text-secondary-foreground hover:bg-muted hover:text-foreground cursor-pointer rounded-r-lg border border-l-0 px-2 text-sm font-light tracking-tight ${loading ? "cursor-not-allowed opacity-50" : ""}`}
                     style={{ paddingTop: "0.25rem", paddingBottom: "0.25rem" }}
                     onClick={() => handleCopy(value, label)}
                     type="button"
@@ -84,7 +91,7 @@ export function Keys() {
         )}
       </div>
       {(keys.privateKey || keys.publicKey) && (
-        <h3 className="mt-4 flex w-full items-center justify-center text-xs font-light text-neutral-300 sm:text-sm md:text-base">
+        <h3 className="text-muted-foreground mt-4 flex w-full items-center justify-center text-xs font-light sm:text-sm md:text-base">
           - Do not share the private key with anyone.
         </h3>
       )}

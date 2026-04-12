@@ -1,61 +1,53 @@
-import { Globe, Lock, Zap } from "lucide-react";
+import FingerprintIcon from "../svgs/fingerprint";
+import ShieldIcon from "../svgs/shield";
+import SealCheckIcon from "../svgs/sealcheck";
 
 const cards = [
   {
-    title: "Tamper-Proof",
-    description: "Certificates are stored securely on decentralized IPFS.",
-    icon: Lock,
-    iconColor: "text-cyan-600/80",
-    cardColor: "bg-cyan-900/10",
-    iconBg: "bg-cyan-900/30",
-    titleColor: "text-cyan-300/90",
+    title: "Ownership",
+    description:
+      "Holder keys prove identity, allowing only the owner to access their credentials.",
+    icon: FingerprintIcon,
   },
   {
-    title: "Instant Verification",
-    description: "Verify authenticity in seconds from anywhere.",
-    icon: Zap,
-    iconColor: "text-green-600/80",
-    cardColor: "bg-green-900/10",
-    iconBg: "bg-green-900/30",
-    titleColor: "text-green-300/90",
+    title: "Verification",
+    description:
+      "Registry and IPFS content are matched, ensuring authenticity.",
+    icon: ShieldIcon,
   },
   {
-    title: "Accessible Anywhere",
-    description: "Works globally without any central authority.",
-    icon: Globe,
-    iconColor: "text-yellow-600/80",
-    cardColor: "bg-yellow-900/10",
-    iconBg: "bg-yellow-900/30",
-    titleColor: "text-yellow-300/90",
+    title: "Trust",
+    description:
+      "Only approved universities and colleges can issue credentials.",
+    icon: SealCheckIcon,
   },
 ];
 
 export function Cards() {
   return (
-    <div className="grid gap-6 px-4 py-8 sm:gap-8 md:grid-cols-3 md:gap-10">
-      {cards.map(
-        ({
-          title,
-          description,
-          icon: Icon,
-          iconColor,
-          cardColor,
-          iconBg,
-          titleColor,
-        }) => (
-          <div key={title} className={`rounded-md ${cardColor} p-6`}>
-            <div className="mb-4 flex items-center gap-2">
-              <div className={`rounded-md ${iconBg} p-2`}>
-                <Icon className={`h-5 w-5 ${iconColor}`} />
-              </div>
-              <h3 className={`text-lg font-medium ${titleColor}`}>{title}</h3>
+    <section className="flex w-full flex-col items-center gap-4 px-4 py-8">
+      <h2 className="py-4 text-2xl font-normal text-neutral-900 italic sm:text-3xl md:text-4xl">
+        Built for real-world credential trust
+      </h2>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {cards.map(({ title, description, icon: Icon }) => (
+          <article
+            key={title}
+            className="border-border bg-card rounded-2xl border p-5 shadow-sm transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md"
+          >
+            <div className="border-primary/20 bg-primary/10 text-primary mb-4 inline-flex rounded-xl border p-2.5">
+              <Icon />
             </div>
-            <p className="text-sm text-neutral-500 sm:text-base">
+            <h3 className="text-foreground text-base font-semibold sm:text-lg">
+              {title}
+            </h3>
+            <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
               {description}
             </p>
-          </div>
-        ),
-      )}
-    </div>
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }

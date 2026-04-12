@@ -3,71 +3,39 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const links = [
-  { title: "Issue", href: "/issue" },
-  { title: "Verify", href: "/verify" },
-  { title: "Generate Keys", href: "/generatekeys" },
-];
+import { Button } from "@/components/ui/button";
 
 export function Navbar() {
   const pathname = usePathname();
+  const isHome = pathname === "/";
 
   return (
-    <div className="selection:bg-primary/20 relative z-10 mx-auto flex w-full max-w-5xl items-center justify-between px-2 py-2">
-      {pathname === "/" ? (
-        <div className="flex items-center text-base font-semibold tracking-tight sm:text-lg md:text-xl lg:text-2xl">
-          <Image src="/logo.svg" alt="Logo" width={80} height={80} />
-          Decentracert
-        </div>
-      ) : (
+    <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-xl">
+      <div className="selection:bg-primary/20 mx-auto flex w-full max-w-5xl items-center justify-between px-3 py-2 sm:px-4">
         <Link
           href="/"
-          className="flex items-center text-base font-semibold tracking-tight sm:text-lg md:text-xl lg:text-2xl"
+          className="flex items-center"
+          aria-label="Go to homepage"
         >
-          <Image src="/logo.svg" alt="Logo" width={80} height={80} />
-          Decentracert
+          <Image src="/logo.svg" alt="Logo" width={60} height={60} />
+          <span className="text-neutral-900">Credbind</span>
         </Link>
-      )}
 
-      <div className="flex items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10">
-        {links.map((link) => {
-          const isActive = pathname === link.href;
-
-          if (isActive) {
-            return (
-              <span
-                key={link.href}
-                className="relative text-xs font-medium tracking-normal text-neutral-50 sm:text-sm md:text-base"
-              >
-                {link.title}
-                <span className="absolute -bottom-0.5 left-0 h-0.5 w-full bg-neutral-50" />
-              </span>
-            );
-          }
-
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-xs font-medium tracking-normal text-neutral-400 transition duration-300 hover:text-neutral-50 sm:text-sm md:text-base"
+        <div className="flex items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10">
+          {isHome && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="cursor-pointer text-xs tracking-wide md:text-sm"
             >
-              {link.title}
-            </Link>
-          );
-        })}
-
-        {pathname === "/" && (
-          <Link
-            href="#steps"
-            aria-label="Get Started guide"
-            className="cursor-pointer rounded-lg bg-neutral-200 px-3 py-1.5 text-xs font-medium tracking-wide text-neutral-800 transition-all duration-300 hover:bg-neutral-400 hover:text-neutral-900 sm:px-4 sm:py-2 md:text-sm"
-          >
-            <span className="sm:hidden">Guide</span>
-            <span className="hidden sm:inline">Get Started</span>
-          </Link>
-        )}
+              <Link href="#steps" aria-label="Get Started guide">
+                <span className="sm:hidden">Guide</span>
+                <span className="hidden sm:inline">Get Started</span>
+              </Link>
+            </Button>
+          )}
+        </div>
       </div>
-    </div>
+    </header>
   );
 }

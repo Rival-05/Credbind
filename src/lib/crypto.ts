@@ -1,64 +1,69 @@
-type CertificateDetails = Record<string, string>;
-
-async function importCryptoKey(
-  jwk: JsonWebKey,
-  usages: KeyUsage[],
-): Promise<CryptoKey> {
-  return crypto.subtle.importKey(
-    "jwk",
-    jwk,
-    { name: "ECDSA", namedCurve: "P-256" },
-    false,
-    usages,
+export async function generateKeyPair() {
+  const keyPair = await window.crypto.subtle.generateKey(
+    {
+      name: "ECDSA",
+      namedCurve: "P-256",
+    },
+    true,
+    ["sign", "verify"]
   );
+
+  return keyPair;
 }
 
-function toHex(buffer: ArrayBuffer): string {
-  return Array.from(new Uint8Array(buffer))
-    .map((byte) => byte.toString(16).padStart(2, "0"))
-    .join("");
+function arrayBufferToBase64(buffer: ArrayBuffer) {
+  return btoa(String.fromCharCode(...new Uint8Array(buffer)));
 }
 
-function hexToBuffer(hex: string): ArrayBuffer {
-  const bytes = new Uint8Array(
-    hex.match(/.{1,2}/g)?.map((byte) => Number.parseInt(byte, 16)) ?? [],
-  );
+export async function exportPublicKey(publicKey: CryptoKey) {
+  const spki = await window.crypto.subtle.exportKey("spki", publicKey);
+  return arrayBufferToBase64(spki);
+}
+
+export async function exportPrivateKey(privateKey: CryptoKey) {
+  const pkcs8 = await window.crypto.subtle.exportKey("pkcs8", privateKey);
+  return arrayBufferToBase64(pkcs8);
+}
+
+function base64ToArrayBuffer(base64: string) {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
   return bytes.buffer;
 }
 
-async function signOrVerifyPayload(details: CertificateDetails) {
+export async function importPrivateKey(base64Key: string) {
+  const buffer = base64ToArrayBuffer(base64Key);
+
+  return await window.crypto.subtle.importKey(
+    "pkcs8",
+    buffer,
+    {
+      name: "ECDSA",
+      namedCurve: "P-256",
+    },
+    true,
+    ["sign"]
+  );
+}
+
+export async function signNonce(
+  privateKey: CryptoKey,
+  nonce: string
+) {
   const encoder = new TextEncoder();
-  return encoder.encode(JSON.stringify(details));
-}
+  const data = encoder.encode(nonce);
 
-export async function signCertificate(
-  details: CertificateDetails,
-  privateKeyJwk: JsonWebKey,
-) {
-  const data = await signOrVerifyPayload(details);
-  const cryptoKey = await importCryptoKey(privateKeyJwk, ["sign"]);
-
-  const signature = await crypto.subtle.sign(
-    { name: "ECDSA", hash: { name: "SHA-256" } },
-    cryptoKey,
-    data,
+  const signature = await window.crypto.subtle.sign(
+    {
+      name: "ECDSA",
+      hash: "SHA-256",
+    },
+    privateKey,
+    data
   );
 
-  return toHex(signature);
-}
-
-export async function verifyCertificate(
-  details: CertificateDetails,
-  signatureHex: string,
-  publicKeyJwk: JsonWebKey,
-) {
-  const data = await signOrVerifyPayload(details);
-  const cryptoKey = await importCryptoKey(publicKeyJwk, ["verify"]);
-
-  return crypto.subtle.verify(
-    { name: "ECDSA", hash: { name: "SHA-256" } },
-    cryptoKey,
-    hexToBuffer(signatureHex),
-    data,
-  );
+  return arrayBufferToBase64(signature);
 }

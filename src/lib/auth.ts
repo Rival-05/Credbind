@@ -16,3 +16,23 @@ export function verifyToken(token: string): AuthPayload | null {
         return null;
     }
 }
+
+export async function signupHolder(data: Record<string, unknown>) {
+    const res = await fetch("/api/auth/holder/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
+
+    return res.json();
+}
+
+export async function signupIssuer(data: Record<string, unknown>) {
+    const res = await fetch("/api/auth/issuer/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
+
+    return res.json();
+}

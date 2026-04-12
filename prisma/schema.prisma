@@ -52,6 +52,7 @@ model Student {
 
   credentials    Credential[]
   auditLogs      AuditLog[]
+  verificationChallenges VerificationChallenge[]
 }
 
 model Credential {
@@ -111,4 +112,19 @@ model AuditLog {
 
   @@index([actorIssuerId])
   @@index([actorStudentId])
+}
+
+model VerificationChallenge {
+  id          String   @id @default(cuid())
+  cid         String
+  studentId   String
+  nonce       String   @unique
+  expiresAt   DateTime
+  used        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([cid])
+  @@index([studentId])
 }

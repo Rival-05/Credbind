@@ -63,7 +63,7 @@ export async function GET(
         }
 
         // 2. Fetch actual content from IPFS gateway
-        let ipfsData: any = null;
+        let ipfsData: Record<string, unknown> | null = null;
         let ipfsAvailable = false;
         let ipfsMatchesDb = false;
 
@@ -74,16 +74,19 @@ export async function GET(
             });
 
             if (ipfsRes.ok) {
-                ipfsData = await ipfsRes.json();
+                ipfsData = (await ipfsRes.json()) as Record<string, unknown>;
                 ipfsAvailable = true;
 
                 // 3. Compare important fields between DB and IPFS
+                const data = ipfsData as Record<string, unknown>;
+                const holder = (data?.holder as Record<string, unknown>) || {};
+                const issuer = (data?.issuer as Record<string, unknown>) || {};
                 ipfsMatchesDb =
-                    ipfsData?.credentialId === credential.credentialId &&
-                    ipfsData?.type === credential.type &&
-                    ipfsData?.title === credential.title &&
-                    ipfsData?.holder?.walletId === credential.student.walletId &&
-                    ipfsData?.issuer?.email === credential.issuer.email;
+                    data?.credentialId === credential.credentialId &&
+                    data?.type === credential.type &&
+                    data?.title === credential.title &&
+                    holder.walletId === credential.student.walletId &&
+                    issuer.email === credential.issuer.email;
             }
         } catch (ipfsError) {
             console.error("IPFS fetch failed:", ipfsError);

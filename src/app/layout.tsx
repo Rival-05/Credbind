@@ -3,6 +3,11 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { Navbar } from "@/components/common/Navbar";
+import { Inter } from "next/font/google";
+import { cn } from "@/lib/utils";
+import { Toaster } from "sileo";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://decentracert.vercel.app"),
@@ -45,9 +50,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${GeistSans.className}`}>
+    <html
+      lang="en"
+      className={cn(GeistSans.className, "font-sans", inter.variable)}
+      data-scroll-behavior="smooth"
+    >
       <body>
         <Navbar />
+        <Toaster position="top-right" theme="light" />
         {children}
         <Analytics />
       </body>
