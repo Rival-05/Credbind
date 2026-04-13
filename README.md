@@ -1,36 +1,166 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CredBind
 
-## Getting Started
+![CredBind Homepage](public/credbind.png)
 
-First, run the development server:
+CredBind is a credential issuance and verification platform built for academic and institutional use cases. It allows approved issuers to generate tamper-evident credentials, anchor them to IPFS, and lets third parties verify both credential integrity and holder ownership.
+
+## Why CredBind
+
+Traditional credential workflows are often hard to verify and easy to forge. CredBind provides:
+
+- A registry-backed credential lifecycle.
+- IPFS-anchored credential payloads.
+- Challenge-response proof of ownership by the holder.
+- Role-based authentication and auditable actions.
+
+## Core Features
+
+- Dual-role auth: Issuer and Student (Holder) signup/login.
+- Domain-gated issuer onboarding via whitelist.
+- Issuer approval flow support (pending/approved/rejected state).
+- Credential issuance pipeline with IPFS upload (Pinata).
+- Registry + IPFS consistency checks during verification.
+- Challenge/nonce-based ownership proof using holder public keys.
+- Audit logs for key account and credential actions.
+- Credential lifecycle states (active, revoked, expired, suspended-ready model).
+
+## How It Works
+
+1. Holder creates an account and stores public key details.
+2. Issuer signs up (domain-checked) and gets approved.
+3. Issuer issues a credential to a holder wallet identity.
+4. Credential payload is pinned to IPFS and CID is stored in registry.
+5. Verifier checks a CID against both registry and IPFS payload.
+6. Verifier can request a challenge and validate holder signature proof.
+
+## Tech Stack
+
+- Framework: Next.js (App Router) + React + TypeScript
+- Backend API: Next.js Route Handlers
+- Database ORM: Prisma
+- Database: PostgreSQL
+- Storage Layer: IPFS via Pinata
+- Auth: JWT + bcrypt password hashing
+- UI: Tailwind CSS + component-based design system
+- Analytics: Vercel Analytics
+
+## Project Structure
+
+```text
+src/
+	app/
+		layout.tsx
+		page.tsx
+		not-found.tsx
+		globals.css
+		login/
+			page.tsx
+		signup/
+			page.tsx
+		api/
+			auth/          # issuer/holder auth endpoints
+			credentials/   # issue and list credentials
+			verify/        # CID verification + challenge/prove flow
+	components/
+		analytics/
+			Visitors.tsx
+		common/
+			Navbar.tsx
+			Footer.tsx
+			Container.tsx
+		landing/
+			Hero.tsx
+			Cards.tsx
+			Steps.tsx
+		verify/
+			VerifyForm.tsx
+		ui/              # reusable UI primitives
+		svgs/            # custom icon components
+	config/            # frontend content/config constants
+	lib/               # frontend helpers and shared utilities
+prisma/
+	schema.prisma      # database schema and enums
+public/
+	credbind.jpg       # README/landing preview image
+```
+
+## Want to contribute?
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure environment variables
+
+Create a `.env` file in the project root:
+
+```env
+DATABASE_URL="postgresql://..."
+JWT_SECRET="your-strong-random-secret"
+PINATA_JWT="your-pinata-jwt"
+```
+
+### 3. Generate Prisma client and run migrations
+
+```bash
+npx prisma generate
+npx prisma migrate dev
+```
+
+### 4. Start development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Start development server
+- `npm run build` - Generate Prisma client and build app
+- `npm run start` - Run production server
+- `npm run lint` - Run ESLint
 
-## Learn More
+## API Overview
 
-To learn more about Next.js, take a look at the following resources:
+Representative endpoint groups:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `POST /api/auth/holder/signup`
+- `POST /api/auth/holder/login`
+- `POST /api/auth/issuer/signup`
+- `POST /api/auth/issuer/login`
+- `POST /api/credentials/issue`
+- `GET /api/credentials/mine`
+- `GET /api/verify/:cid`
+- `POST /api/verify/challenge`
+- `POST /api/verify/prove`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Data Model Highlights
 
-## Deploy on Vercel
+Main entities in the Prisma schema:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Issuer
+- Student
+- Credential
+- Revocation
+- DomainWhitelist
+- AuditLog
+- VerificationChallenge
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Security Notes
+
+- Passwords are hashed before persistence.
+- Sensitive endpoints require JWT authorization.
+- Issuer issuance is restricted to approved issuer accounts.
+- Ownership proof uses short-lived nonce challenges to reduce replay risk.
+
+## Current Status
+
+This project is under active development. The base issuance and verification pipeline is implemented and can be extended with admin tooling, revocation dashboards, and richer credential schemas.
+
+## License
+
+This repository currently follows the project-level license configuration.

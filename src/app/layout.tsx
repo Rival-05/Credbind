@@ -10,25 +10,25 @@ import { Toaster } from "sileo";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://decentracert.vercel.app"),
-  title: "Decentracert",
+  metadataBase: new URL("https://credbind.vercel.app"),
+  title: "credbind",
   description:
-    "Issue and verify certificates in seconds. Decentracert offers secure, decentralized credential management with instant authenticity checks.",
+    "Issue and verify credentials in seconds. credbind offers decentralized credential management with instant authenticity checks.",
   icons: {
     icon: [{ url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" }],
   },
   openGraph: {
-    title: "Decentracert",
+    title: "credbind",
     description:
-      "Issue and verify certificates in seconds. Decentracert offers secure, decentralized credential management with instant authenticity checks.",
-    url: "https://decentracert.vercel.app",
-    siteName: "Decentracert",
+      "Issue and verify credentials in seconds. credbind offers decentralized credential management with instant authenticity checks.",
+    url: "https://credbind.vercel.app",
+    siteName: "credbind",
     images: [
       {
-        url: "opengraph-image.png",
+        url: "/credbind.png",
         width: 1200,
         height: 630,
-        alt: "Decentracert Preview",
+        alt: "CredBind Preview",
       },
     ],
     locale: "en-US",
@@ -36,10 +36,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Decentracert",
+    title: "credbind",
     description:
-      "Issue and verify certificates in seconds. Decentracert offers secure, decentralized credential management with instant authenticity checks.",
-    images: ["opengraph-image.png"],
+      "Issue and verify credentials in seconds. credbind offers decentralized credential management with instant authenticity checks.",
+    images: ["/credbind.png"],
     creator: "@Rival_o5",
   },
 };
