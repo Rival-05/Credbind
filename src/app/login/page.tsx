@@ -86,13 +86,23 @@ function LoginForm() {
           <Card className="w-full rounded-2xl border shadow-sm">
             <CardHeader className="space-y-4">
               <div className="grid grid-cols-2 gap-2 p-1">
-                <button type="button" onClick={() => setRole("holder")}>
+                <Button
+                  type="button"
+                  variant={role === "holder" ? "outline" : "secondary"}
+                  onClick={() => setRole("holder")}
+                  className="cursor-pointer"
+                >
                   Holder
-                </button>
+                </Button>
 
-                <button type="button" onClick={() => setRole("issuer")}>
+                <Button
+                  type="button"
+                  variant={role === "issuer" ? "outline" : "secondary"}
+                  onClick={() => setRole("issuer")}
+                  className="cursor-pointer"
+                >
                   Issuer
-                </button>
+                </Button>
               </div>
 
               <CardTitle className="text-2xl">{heading}</CardTitle>
@@ -123,8 +133,14 @@ function LoginForm() {
               </form>
             </CardContent>
 
-            <CardFooter>
-              <Link href={`/signup?role=${role}`}>Sign up</Link>
+            <CardFooter className="text-muted-foreground justify-center text-sm">
+              <span>Don't have an account?&nbsp;</span>
+              <Link
+                href={`/signup?role=${role}`}
+                className="text-foreground font-medium underline-offset-4 hover:underline"
+              >
+                Sign up
+              </Link>
             </CardFooter>
           </Card>
         </main>

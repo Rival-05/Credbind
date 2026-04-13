@@ -36,12 +36,13 @@ export function Cards() {
             key={title}
             className="border-border bg-card rounded-2xl border p-5 shadow-sm transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md"
           >
-            <div className="border-primary/20 bg-primary/10 text-primary mb-4 inline-flex rounded-xl border p-2.5">
+            <div className="text-primary mb-2 inline-flex items-center gap-2">
               <Icon />
+              <h3 className="text-foreground text-base font-semibold sm:text-lg">
+                {title}
+              </h3>
             </div>
-            <h3 className="text-foreground text-base font-semibold sm:text-lg">
-              {title}
-            </h3>
+
             <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
               {description}
             </p>

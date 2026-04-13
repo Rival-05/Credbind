@@ -141,7 +141,27 @@ function SignupForm() {
       <Container>
         <main className="flex w-full max-w-md items-center justify-center py-8">
           <Card className="w-full rounded-2xl border shadow-sm">
-            <CardHeader>
+            <CardHeader className="space-y-4">
+              <div className="grid grid-cols-2 gap-2 p-1">
+                <Button
+                  type="button"
+                  variant={role === "holder" ? "outline" : "secondary"}
+                  onClick={() => setRole("holder")}
+                  className="cursor-pointer"
+                >
+                  Holder
+                </Button>
+
+                <Button
+                  type="button"
+                  variant={role === "issuer" ? "outline" : "secondary"}
+                  onClick={() => setRole("issuer")}
+                  className="cursor-pointer"
+                >
+                  Issuer
+                </Button>
+              </div>
+
               <CardTitle className="text-2xl">{heading}</CardTitle>
             </CardHeader>
 
@@ -157,7 +177,7 @@ function SignupForm() {
                       }
                     />
                     <Input
-                      placeholder="Domain"
+                      placeholder="Domain (e.g. juetguna.in)"
                       value={form.domain}
                       onChange={(e) =>
                         setForm({ ...form, domain: e.target.value })
@@ -206,8 +226,14 @@ function SignupForm() {
               </form>
             </CardContent>
 
-            <CardFooter>
-              <Link href={`/login?role=${role}`}>Log in</Link>
+            <CardFooter className="text-muted-foreground justify-center text-sm">
+              <span>Already have an account?&nbsp;</span>
+              <Link
+                href={`/login?role=${role}`}
+                className="text-foreground font-medium underline-offset-4 hover:underline"
+              >
+                Log in
+              </Link>
             </CardFooter>
           </Card>
         </main>

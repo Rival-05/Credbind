@@ -5,7 +5,7 @@ import Github from "../svgs/github";
 import Lightbulb from "../svgs/lightbulb";
 export function Hero() {
   return (
-    <div className="my-12 flex flex-col items-center justify-center gap-6 py-8 text-center">
+    <div className="my-10 flex flex-col items-center justify-center gap-6 py-8 text-center">
       <div className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-neutral-700 shadow-[0_8px_24px_rgba(15,23,42,0.08)] ring-1 ring-black/10 ring-inset">
         <span className="inline-flex items-center justify-center rounded-full bg-amber-100 text-amber-500 shadow-[0_0_14px_rgba(245,158,11,0.45)]">
           <Lightbulb className="text-amber-500" />
