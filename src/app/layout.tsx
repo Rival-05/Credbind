@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description:
     "Issue and verify credentials in seconds. credbind offers decentralized credential management with instant authenticity checks.",
   icons: {
-    icon: [{ url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" }],
+    icon: [{ url: "/favicon.png", sizes: "16x16", type: "image/png" }],
   },
   openGraph: {
     title: "credbind",

@@ -2,26 +2,31 @@
 
 import { useEffect, useState } from "react";
 import Eye from "../svgs/eye";
-import { getUniqueVisitorCount } from "@/lib/visitor-count";
 
 export default function Visitors() {
-  const [visitorCount, setVisitorCount] = useState<number | null>(null);
+  const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
-    try {
-      setVisitorCount(getUniqueVisitorCount());
-    } catch {
-      setVisitorCount(0);
-    }
-  }, []);
+    const load = async () => {
+      try {
+        const res = await fetch("/api/visitors", { cache: "no-store" });
+        const data = await res.json();
+        setCount(data.count);
+      } catch {
+        setCount(0);
+      }
+    };
 
-  const visitorLabel = visitorCount === 1 ? "visitor" : "visitors";
+    load();
+  }, []);
 
   return (
     <div className="flex items-center gap-1 text-neutral-400">
       <Eye />
       <span className="text-sm tracking-wide">
-        {visitorCount === null ? "..." : `${visitorCount} ${visitorLabel}`}
+        {count === null
+          ? "..."
+          : `${count} ${count === 1 ? "visitor" : "visitors"}`}
       </span>
     </div>
   );

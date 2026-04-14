@@ -26,7 +26,7 @@ const cards = [
 export function Cards() {
   return (
     <section className="flex w-full flex-col items-center gap-4 px-4 py-8">
-      <h2 className="py-4 text-2xl font-normal text-neutral-900 italic sm:text-3xl md:text-4xl">
+      <h2 className="py-4 text-2xl text-neutral-800 sm:text-3xl md:text-4xl">
         Built for real-world credential trust
       </h2>
 
@@ -34,7 +34,7 @@ export function Cards() {
         {cards.map(({ title, description, icon: Icon }) => (
           <article
             key={title}
-            className="border-border bg-card rounded-2xl border p-5 shadow-sm transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md"
+            className="border-border bg-card rounded-xl border p-5 shadow-sm transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md"
           >
             <div className="text-primary mb-2 inline-flex items-center gap-2">
               <Icon />

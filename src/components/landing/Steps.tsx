@@ -19,7 +19,7 @@ const steps = [
 export function Steps() {
   return (
     <div id="steps" className="mt-10 px-4 py-12 sm:px-6 sm:py-16">
-      <h2 className="mb-10 text-center text-2xl font-semibold text-neutral-900 italic sm:mb-12 sm:text-3xl md:text-4xl">
+      <h2 className="mb-10 text-center text-2xl font-semibold text-neutral-900 sm:mb-12 sm:text-3xl md:text-4xl">
         How Credbind works
       </h2>
       <div className="mx-auto grid max-w-6xl gap-8 sm:gap-10 md:grid-cols-3">

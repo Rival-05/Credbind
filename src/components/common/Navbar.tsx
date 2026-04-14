@@ -11,14 +11,16 @@ export function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-xl">
-      <div className="selection:bg-primary/20 mx-auto flex w-full max-w-5xl items-center justify-between px-3 py-2 sm:px-4">
+      <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-3 py-2 sm:px-4">
         <Link
           href="/"
-          className="flex items-center"
+          className="flex items-center gap-2"
           aria-label="Go to homepage"
         >
-          <Image src="/logo.svg" alt="Logo" width={60} height={60} />
-          <span className="text-neutral-900">Credbind</span>
+          <Image src="/logo.svg" alt="Logo" width={25} height={25} />
+          <span className="text-lg font-normal tracking-wide text-black">
+            credbind
+          </span>
         </Link>
 
         <div className="flex items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10">
@@ -26,7 +28,7 @@ export function Navbar() {
             <Button
               variant="outline"
               size="sm"
-              className="cursor-pointer text-xs tracking-wide md:text-sm"
+              className="cursor-pointer text-xs tracking-wide text-neutral-900 md:text-sm"
             >
               <Link href="#steps" aria-label="Get Started guide">
                 <span className="sm:hidden">Guide</span>
