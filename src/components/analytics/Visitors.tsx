@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Eye from "../svgs/eye";
 
 export default function Visitors() {
   const [count, setCount] = useState<number | null>(null);
@@ -13,7 +12,7 @@ export default function Visitors() {
         const data = await res.json();
         setCount(data.count);
       } catch {
-        setCount(0);
+        setCount(-1);
       }
     };
 
@@ -22,7 +21,6 @@ export default function Visitors() {
 
   return (
     <div className="flex items-center gap-1 text-neutral-400">
-      <Eye />
       <span className="text-sm tracking-wide">
         {count === null
           ? "..."

@@ -18,7 +18,7 @@ export function Navbar() {
           aria-label="Go to homepage"
         >
           <Image src="/logo.svg" alt="Logo" width={25} height={25} />
-          <span className="text-lg font-normal tracking-wide text-black">
+          <span className="text-lg font-normal tracking-wide text-neutral-900">
             credbind
           </span>
         </Link>

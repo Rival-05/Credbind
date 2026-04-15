@@ -1,16 +1,42 @@
 import Link from "next/link";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-6">
-      <h1 className="text-4xl font-bold">Sorry</h1>
-      <p className="text-muted-foreground">
-        The page you&apos;re looking for doesn&apos;t exist as of now, please
-        come back later.
-      </p>
-      <Link href="/" className="rounded-lg border px-4 py-2">
-        Go to Home
-      </Link>
+    <main className="flex min-h-screen items-center justify-center px-6 py-12">
+      <section className="grid w-full max-w-5xl items-center gap-10 md:grid-cols-2">
+        <div className="relative mx-auto w-full max-w-60 md:max-w-75">
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-2 bottom-8 h-80 rounded-full bg-sky-400/30 blur-3xl"
+          />
+          <Image
+            src="/sadness.png"
+            alt="Sad character"
+            width={260}
+            height={260}
+            priority
+            className="relative z-10 h-auto w-full object-contain"
+          />
+        </div>
+
+        <div className="text-center md:text-left">
+          <h1 className="text-3xl leading-tight font-semibold text-neutral-700 sm:text-4xl">
+            Awww... Don&apos;t Cry.
+          </h1>
+          <p className="mt-4 text-lg text-neutral-700">
+            It&apos;s just a 404 Error!
+          </p>
+          <p className="mt-3 text-base leading-7 text-neutral-700">
+            This page doesn&apos;t exist as of now.
+          </p>
+
+          <Button asChild variant="outline" className="mt-8">
+            <Link href="/">Head back to home</Link>
+          </Button>
+        </div>
+      </section>
     </main>
   );
 }

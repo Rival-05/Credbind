@@ -6,7 +6,7 @@ import { Navbar } from "@/components/common/Navbar";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sileo";
-
+import { TooltipProvider } from "@/components/ui/tooltip";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
@@ -58,7 +58,7 @@ export default function RootLayout({
       <body>
         <Navbar />
         <Toaster position="top-right" theme="light" />
-        {children}
+        <TooltipProvider>{children}</TooltipProvider>
         <Analytics />
       </body>
     </html>

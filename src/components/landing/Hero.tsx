@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Playwrite_PE } from "next/font/google";
-
 import { Button } from "@/components/ui/button";
 import Github from "../svgs/github";
 import Lightbulb from "../svgs/lightbulb";
@@ -18,7 +17,7 @@ export function Hero() {
         </span>
         <span>Why Credbind</span>
       </div>
-      <h1 className="max-w-2xl bg-linear-to-b from-neutral-800 via-neutral-700 to-neutral-600 bg-clip-text text-3xl tracking-tighter text-transparent sm:text-4xl md:text-5xl lg:text-6xl">
+      <h1 className="max-w-2xl bg-linear-to-b from-neutral-800 via-neutral-700 to-neutral-600 bg-clip-text text-3xl tracking-tight text-transparent sm:text-4xl md:text-5xl lg:text-6xl">
         Secure, Verifiable{" "}
         <p className="text-brand">Certificates — Anywhere.</p>
       </h1>
