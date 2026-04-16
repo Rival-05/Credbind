@@ -112,12 +112,15 @@ body {
 
   html {
     @apply overflow-x-hidden scroll-smooth;
+    width: 100%;
+    scrollbar-gutter: stable;
   }
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground min-w-0 overflow-x-hidden;
+    width: 100%;
   }
   main {
     @apply min-w-0;

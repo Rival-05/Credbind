@@ -22,14 +22,14 @@ export default function NotFound() {
         </div>
 
         <div className="text-center md:text-left">
-          <h1 className="text-3xl leading-tight font-semibold text-neutral-700 sm:text-4xl">
+          <h1 className="text-muted-foreground text-3xl leading-tight font-semibold sm:text-4xl">
             Awww... Don&apos;t Cry.
           </h1>
-          <p className="mt-4 text-lg text-neutral-700">
+          <p className="text-muted-foreground mt-4 text-lg">
             It&apos;s just a 404 Error!
           </p>
-          <p className="mt-3 text-base leading-7 text-neutral-700">
-            This page doesn&apos;t exist as of now.
+          <p className="text-muted-foreground mt-3 text-base leading-7">
+            We are trying our best to fix.
           </p>
 
           <Button asChild variant="outline" className="mt-8">

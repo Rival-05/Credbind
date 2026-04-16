@@ -1,7 +1,7 @@
 import { Cards } from "@/components/landing/Cards";
 import { Container } from "@/components/common/Container";
 import { Hero } from "@/components/landing/Hero";
-import { Steps } from "@/components/landing/Steps";
+import { Waitlist } from "@/components/landing/waitlist";
 import { FAQ } from "@/components/landing/faq";
 import { Separator } from "@/components/ui/separator";
 import Footer from "@/components/common/Footer";
@@ -12,7 +12,7 @@ export default function Home() {
       <Container>
         <Hero />
         <Cards />
-        <Steps />
+        <Waitlist />
         <FAQ />
         <Separator />
         <Footer />

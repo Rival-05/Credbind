@@ -13,23 +13,29 @@ export default function Footer() {
     socialLinks.find((link) => link.name === "Email")?.href ??
     "mailto:rivalo3.chat@gmail.com";
   const contactLinkClass =
-    "transition-colors duration-400 text-neutral-500 hover:text-neutral-900";
+    "transition-colors duration-400 text-muted-foreground hover:text-foreground";
 
   return (
-    <div className="mx-auto flex w-full flex-col gap-6 px-4 py-8 md:flex-row md:items-start md:justify-between">
-      <div className="flex flex-col gap-5 text-neutral-500">
+    <div className="mx-auto flex w-full flex-col gap-6 px-3 py-6 sm:gap-8 sm:px-4 sm:py-8 md:flex-row md:items-start md:justify-between">
+      <div className="text-muted-foreground flex min-w-0 flex-col gap-4 sm:gap-5">
         <Link
           href="/"
-          className="flex items-baseline gap-2"
+          className="flex flex-shrink-0 items-baseline gap-2"
           aria-label="Go to homepage"
         >
-          <Image src="/logo.svg" alt="Logo" width={25} height={25} />
-          <span className="text-2xl font-normal tracking-wide text-neutral-900">
+          <Image
+            src="/logo.svg"
+            alt="Logo"
+            width={25}
+            height={25}
+            className="flex-shrink-0"
+          />
+          <span className="text-foreground text-lg font-normal tracking-wide sm:text-2xl">
             credbind
           </span>
         </Link>
-        <div className="flex flex-col">
-          <p className="flex items-baseline gap-2 text-sm font-medium">
+        <div className="flex flex-col gap-2 sm:gap-3">
+          <p className="flex items-baseline gap-2 text-xs font-medium sm:text-sm">
             <Link href={`${socialLinks[0].href}`} className={contactLinkClass}>
               {footerConfig.copyrightName}
             </Link>
@@ -38,9 +44,9 @@ export default function Footer() {
           <Visitors />
         </div>
       </div>
-      <div className="flex flex-col items-start gap-3 text-sm font-medium md:pt-1">
-        <span className="text-base text-neutral-900">Contact us</span>
-        <div className="flex flex-col gap-2">
+      <div className="flex flex-col items-start gap-2 text-xs font-medium sm:gap-3 sm:text-sm md:pt-1">
+        <span className="text-foreground text-sm sm:text-base">Contact us</span>
+        <div className="flex flex-col gap-1.5 sm:gap-2">
           <Link
             href={twitterLink}
             target="_blank"

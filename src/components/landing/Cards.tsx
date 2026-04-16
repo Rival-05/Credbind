@@ -25,25 +25,25 @@ const cards = [
 
 export function Cards() {
   return (
-    <section className="flex w-full flex-col items-center gap-4 px-4 py-8">
-      <h2 className="py-4 text-2xl text-neutral-900 sm:text-3xl md:text-4xl">
+    <section className="my-2 flex w-full flex-col items-center gap-4 px-3 py-4 sm:my-4 sm:gap-6 sm:px-4 sm:py-6 md:py-10">
+      <h2 className="text-foreground max-w-2xl py-2 text-xl sm:py-4 sm:text-2xl md:text-3xl lg:text-4xl">
         Built for real-world credential trust
       </h2>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid w-full gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
         {cards.map(({ title, description, icon: Icon }) => (
           <article
             key={title}
-            className="border-border bg-card cursor-default rounded-lg border p-5 shadow-sm transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md"
+            className="border-border bg-card cursor-default rounded-lg border p-4 shadow-sm transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md sm:p-5 md:p-6"
           >
-            <div className="mb-2 inline-flex items-center gap-2">
+            <div className="mb-2 inline-flex items-center gap-2 sm:mb-3">
               <Icon />
-              <h3 className="text-foreground text-base font-semibold sm:text-lg">
+              <h3 className="text-foreground text-sm font-semibold sm:text-base md:text-lg">
                 {title}
               </h3>
             </div>
 
-            <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+            <p className="text-muted-foreground mt-2 text-xs leading-relaxed sm:text-sm">
               {description}
             </p>
           </article>

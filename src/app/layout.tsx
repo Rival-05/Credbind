@@ -57,7 +57,7 @@ export default function RootLayout({
     >
       <body>
         <Navbar />
-        <Toaster position="top-right" theme="light" />
+        <Toaster position="top-center" theme="light" />
         <TooltipProvider>{children}</TooltipProvider>
         <Analytics />
       </body>

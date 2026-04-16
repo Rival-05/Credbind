@@ -3,6 +3,7 @@ import { Playwrite_PE } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import Github from "../svgs/github";
 import Lightbulb from "../svgs/lightbulb";
+import ArrowRight from "../svgs/arrowright";
 
 const playwrite = Playwrite_PE({
   weight: ["100", "200", "300", "400"],
@@ -30,26 +31,11 @@ export function Hero() {
         <Button
           asChild
           variant="outline"
-          className="group mt-4 gap-2 px-4 py-2 text-sm tracking-tight text-neutral-900 sm:text-base"
+          className="group text-foreground mt-4 gap-2 px-4 py-2 text-sm tracking-tight sm:text-base"
         >
           <Link href="/login">
             Go to Dashboard
-            <svg
-              width="16"
-              height="16"
-              fill="none"
-              className="transition-all duration-300 group-hover:pl-1"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeOpacity=".8"
-                strokeWidth="1.25"
-                d="M8 4.75 11.25 8m0 0L8 11.25M11.25 8h-6.5"
-              />
-            </svg>
+            <ArrowRight className="transition-all duration-300 group-hover:translate-x-1" />
           </Link>
         </Button>
         <Button
