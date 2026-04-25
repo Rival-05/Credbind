@@ -1,6 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
+import { getMetadata } from "@/config/Meta";
+
+export const metadata: Metadata = getMetadata("/404");
 
 export default function NotFound() {
   return (

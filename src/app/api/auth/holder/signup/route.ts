@@ -9,10 +9,10 @@ function generateWalletId(enrollment: string) {
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const { name, email, enrollment, password, publicKey } = body;
+        const { name, email, enrollment, password } = body;
 
         // 1. Validate input
-        if (!name || !email || !enrollment || !password || !publicKey) {
+        if (!name || !email || !enrollment || !password) {
             return NextResponse.json(
                 { success: false, message: "All fields are required" },
                 { status: 400 }
@@ -60,7 +60,6 @@ export async function POST(req: NextRequest) {
                 enrollment: normalizedEnrollment,
                 passwordHash: hashedPassword,
                 walletId,
-                publicKey,
             },
         });
 
@@ -89,7 +88,6 @@ export async function POST(req: NextRequest) {
                     email: student.email,
                     enrollment: student.enrollment,
                     walletId: student.walletId,
-                    publicKey: student.publicKey,
                 },
             },
             { status: 201 }

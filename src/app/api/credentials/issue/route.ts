@@ -1,11 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyToken } from "@/lib/auth";
+import crypto from "crypto";
 
 const PINATA_ENDPOINT = "https://api.pinata.cloud/pinning/pinJSONToIPFS";
 
 function generateCredentialId() {
     return `cert-${Date.now()}`;
+}
+
+function stableStringify(obj: any): string {
+    if (obj === null || typeof obj !== "object") {
+        return JSON.stringify(obj);
+    }
+    if (Array.isArray(obj)) {
+        return "[" + obj.map(stableStringify).join(",") + "]";
+    }
+    return (
+        "{" + Object.keys(obj).sort().map((key) => JSON.stringify(key) + ":" + stableStringify(obj[key])).join(",") + "}"
+    );
 }
 
 export async function POST(req: NextRequest) {
@@ -49,7 +62,7 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json();
-        const { walletId, type, title, cgpa, graduationYear } = body;
+        const { walletId, type, title, program, department, cgpa, graduationYear, expiresAt } = body;
 
         if (!walletId || !type || !title) {
             return NextResponse.json(
@@ -72,31 +85,36 @@ export async function POST(req: NextRequest) {
 
         const credentialId = generateCredentialId();
 
-        // Build certificate JSON (this is what goes to IPFS)
         const credentialJson = {
             credentialId,
             type,
             title,
             issuedAt: new Date().toISOString(),
             issuer: {
-                id: issuer.id,
                 orgName: issuer.orgName,
-                email: issuer.email,
                 domain: issuer.domain,
             },
             holder: {
-                id: student.id,
                 name: student.name,
-                email: student.email,
                 enrollment: student.enrollment,
-                walletId: student.walletId,
-                publicKey: student.publicKey,
             },
-            claims: {
-                cgpa: cgpa || null,
-                graduationYear: graduationYear || null,
+            academic: {
+                program: program ?? null,
+                department: department ?? null,
+                cgpa: cgpa ?? null,
+                graduationYear: graduationYear ?? null,
             },
         };
+
+        const canonical = stableStringify(
+            credentialJson
+        );
+
+        const payloadHash = crypto
+            .createHash("sha256")
+            .update(canonical)
+            .digest("hex");
+
 
         // Upload to Pinata
         const pinataRes = await fetch(PINATA_ENDPOINT, {
@@ -131,23 +149,23 @@ export async function POST(req: NextRequest) {
             data: {
                 credentialId,
                 cid,
+                payloadHash,
                 type,
                 title,
                 issuerId: issuer.id,
                 studentId: student.id,
-                payload: credentialJson,
+                expiresAt: expiresAt ? new Date(expiresAt) : null,
             },
         });
 
-        // Audit log
         await prisma.auditLog.create({
             data: {
                 action: "CREDENTIAL_ISSUED",
                 role: "ISSUER",
                 actorIssuerId: issuer.id,
                 metadata: {
-                    credentialId: credential.credentialId,
-                    cid: credential.cid,
+                    credentialId,
+                    cid,
                     studentId: student.id,
                     walletId: student.walletId,
                     type,

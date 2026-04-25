@@ -25,113 +25,112 @@ enum UserRole {
 }
 
 model Issuer {
-  id             String         @id @default(cuid())
-  orgName        String
-  email          String         @unique
-  domain         String
-  passwordHash   String
-  status         IssuerStatus   @default(PENDING)
-  issuerPublicKey String?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  id            String   @id @default(cuid())
+  orgName       String
+  email         String   @unique
+  domain        String
+  passwordHash  String
+  status        IssuerStatus @default(PENDING)
 
-  credentials    Credential[]
-  auditLogs      AuditLog[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  credentials   Credential[]
+  auditLogs     AuditLog[]
 }
 
 model Student {
-  id             String         @id @default(cuid())
-  name           String
-  email          String         @unique
-  enrollment     String         @unique
-  passwordHash   String
-  walletId       String         @unique
-  publicKey      String
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  enrollment    String   @unique
+  passwordHash  String
 
-  credentials    Credential[]
-  auditLogs      AuditLog[]
-  verificationChallenges VerificationChallenge[]
+  walletId      String   @unique
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  credentials   Credential[]
+  auditLogs     AuditLog[]
 }
 
 model Credential {
-  id             String           @id @default(cuid())
-  credentialId   String           @unique
-  cid            String           @unique
-  type           String
-  title          String?
-  payload        Json?
-  status         CredentialStatus @default(ACTIVE)
-  issuedAt       DateTime         @default(now())
-  expiresAt      DateTime?
-  revokedAt      DateTime?
+  id            String   @id @default(cuid())
 
-  issuerId       String
-  studentId      String
+  credentialId  String   @unique
+  cid           String   @unique
+  payloadHash   String   @db.VarChar(64)
 
-  issuer         Issuer           @relation(fields: [issuerId], references: [id], onDelete: Cascade)
-  student        Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  revocation     Revocation?
+  type          String
+  title         String?
 
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  status        CredentialStatus @default(ACTIVE)
+
+  issuedAt      DateTime @default(now())
+  expiresAt     DateTime?
+  revokedAt     DateTime?
+  suspendedAt   DateTime?
+
+  issuerId      String
+  studentId     String
+
+  issuer        Issuer   @relation(fields: [issuerId], references: [id], onDelete: Cascade)
+  student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  revocation    Revocation?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@index([issuerId])
   @@index([studentId])
   @@index([cid])
+  @@index([status])
+  @@index([credentialId])
 }
 
 model Revocation {
-  id             String       @id @default(cuid())
-  cid            String       @unique
-  reason         String
-  revokedAt      DateTime     @default(now())
+  id            String   @id @default(cuid())
 
-  credentialId   String       @unique
-  credential     Credential   @relation(fields: [credentialId], references: [id], onDelete: Cascade)
+  credentialId  String   @unique
+  cid           String   @unique
+
+  reason        String
+  revokedAt     DateTime @default(now())
+
+  credential    Credential @relation(fields: [credentialId], references: [id], onDelete: Cascade)
 }
 
 model DomainWhitelist {
-  id             String       @id @default(cuid())
-  domain         String       @unique
-  createdAt      DateTime     @default(now())
+  id            String   @id @default(cuid())
+  domain        String   @unique
+  createdAt     DateTime @default(now())
 }
 
 model AuditLog {
-  id             String       @id @default(cuid())
-  action         String
-  role           UserRole
-  actorIssuerId  String?
-  actorStudentId String?
-  metadata       Json?
-  createdAt      DateTime     @default(now())
+  id            String   @id @default(cuid())
 
-  issuer         Issuer?      @relation(fields: [actorIssuerId], references: [id], onDelete: Cascade)
-  student        Student?     @relation(fields: [actorStudentId], references: [id], onDelete: Cascade)
+  action        String
+  role          UserRole
+
+  actorIssuerId String?
+  actorStudentId String?
+
+  metadata      Json?
+  createdAt     DateTime @default(now())
+
+  issuer        Issuer?  @relation(fields: [actorIssuerId], references: [id], onDelete: Cascade)
+  student       Student? @relation(fields: [actorStudentId], references: [id], onDelete: Cascade)
 
   @@index([actorIssuerId])
   @@index([actorStudentId])
-}
-
-model VerificationChallenge {
-  id          String   @id @default(cuid())
-  cid         String
-  studentId   String
-  nonce       String   @unique
-  expiresAt   DateTime
-  used        Boolean  @default(false)
-  createdAt   DateTime @default(now())
-
-  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-
-  @@index([cid])
-  @@index([studentId])
+  @@index([action])
 }
 
 model SiteAnalytics {
-  id        String   @id @default("main")
-  visitors  Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default("main")
+  visitors      Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

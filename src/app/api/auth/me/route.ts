@@ -61,7 +61,6 @@ export async function GET(req: NextRequest) {
                     email: true,
                     enrollment: true,
                     walletId: true,
-                    publicKey: true,
                     createdAt: true,
                 },
             });

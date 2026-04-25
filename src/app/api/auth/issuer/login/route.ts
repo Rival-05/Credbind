@@ -8,7 +8,6 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         const { email, password } = body;
 
-        // 1. Validate input
         if (!email || !password) {
             return NextResponse.json(
                 { success: false, message: "Email and password are required" },
@@ -18,29 +17,26 @@ export async function POST(req: NextRequest) {
 
         const normalizedEmail = email.toLowerCase().trim();
 
-        // 2. Find issuer
         const issuer = await prisma.issuer.findUnique({
             where: { email: normalizedEmail },
         });
 
         if (!issuer) {
             return NextResponse.json(
-                { success: false, message: "Invalid credentials" },
+                { success: false, message: "Issuer doesn't exist" },
                 { status: 401 }
             );
         }
 
-        // 3. Compare password
         const isPasswordValid = await bcrypt.compare(password, issuer.passwordHash);
 
         if (!isPasswordValid) {
             return NextResponse.json(
-                { success: false, message: "Invalid credentials" },
+                { success: false, message: "Wrong password" },
                 { status: 401 }
             );
         }
 
-        // 4. Check approval status
         if (issuer.status !== "APPROVED") {
             return NextResponse.json(
                 {
@@ -52,7 +48,6 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // 5. Generate JWT
         const token = jwt.sign(
             {
                 issuerId: issuer.id,
@@ -63,7 +58,6 @@ export async function POST(req: NextRequest) {
             { expiresIn: "7d" }
         );
 
-        // 6. Optional audit log
         await prisma.auditLog.create({
             data: {
                 action: "ISSUER_LOGIN",
@@ -75,7 +69,6 @@ export async function POST(req: NextRequest) {
             },
         });
 
-        // 7. Return token
         return NextResponse.json(
             {
                 success: true,

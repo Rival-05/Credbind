@@ -9,7 +9,7 @@ const faqs = [
   {
     question: "What is Credbind?",
     answer:
-      "Credbind is a digital platform that helps verify certificates quickly and securely, reducing dependence on paper-based verification.",
+      "Credbind is a digital platform that helps verify certificates quickly and securely with zero downtime, reducing dependence on paper-based verification.",
   },
   {
     question: "How does Credbind work?",
@@ -35,14 +35,14 @@ const faqs = [
 
 export function FAQ() {
   return (
-    <div className="mx-auto w-full max-w-5xl px-3 py-4 sm:mt-2 sm:px-4 sm:py-6 md:px-6 md:py-10">
+    <div className="mx-auto w-full max-w-5xl px-3 py-4 sm:my-4 sm:px-4 sm:py-6 md:my-6 md:px-6 md:py-10">
       <h2 className="text-foreground text-center text-lg sm:text-2xl md:text-3xl lg:text-4xl">
         Frequently Asked Questions
       </h2>
 
       <Accordion
         defaultValue={[faqs[0].question]}
-        className="mt-6 w-full p-2 sm:mt-8 sm:p-3 md:p-4 lg:p-6"
+        className="mt-4 w-full p-2 sm:mt-6 sm:p-3 md:p-4 lg:p-6"
       >
         {faqs.map((faq) => (
           <AccordionItem

@@ -31,7 +31,6 @@ export async function GET(req: NextRequest) {
                 email: true,
                 enrollment: true,
                 walletId: true,
-                publicKey: true,
                 createdAt: true,
             },
         });
@@ -56,12 +55,10 @@ export async function GET(req: NextRequest) {
                 status: true,
                 issuedAt: true,
                 expiresAt: true,
-                payload: true,
                 issuer: {
                     select: {
                         id: true,
                         orgName: true,
-                        email: true,
                         domain: true,
                     },
                 },
