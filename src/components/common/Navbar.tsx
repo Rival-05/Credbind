@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { ProfileMenu } from "@/components/common/ProfileMenu";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -23,7 +24,7 @@ export function Navbar() {
           </span>
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {isHome && (
             <Button
               variant="outline"
@@ -36,6 +37,7 @@ export function Navbar() {
               </Link>
             </Button>
           )}
+          <ProfileMenu />
         </div>
       </div>
     </header>

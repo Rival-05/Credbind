@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import crypto from "crypto";
 
-function stableStringify(obj: any): string {
+type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+
+function stableStringify(obj: JsonValue): string {
     if (obj === null || typeof obj !== "object") {
         return JSON.stringify(obj);
     }
@@ -63,7 +65,7 @@ export async function GET(
 
         // 2. Fetch IPFS Content
         let ipfsAvailable = false;
-        let ipfsPayload: any = null;
+        let ipfsPayload: JsonValue | null = null;
         let integrityPassed = false;
 
         try {
@@ -166,7 +168,11 @@ export async function GET(
             },
 
             academic:
-                ipfsPayload?.academic ?? null,
+                ipfsPayload &&
+                    typeof ipfsPayload === "object" &&
+                    !Array.isArray(ipfsPayload)
+                    ? ((ipfsPayload as { academic?: JsonValue }).academic ?? null)
+                    : null,
 
             ipfsPayload,
         });

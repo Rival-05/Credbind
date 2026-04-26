@@ -33,7 +33,7 @@ export function Hero() {
           variant="outline"
           className="group text-foreground mt-4 gap-2 px-4 py-2 text-sm tracking-tight sm:text-base"
         >
-          <Link href="/login">
+          <Link href="/dashboard">
             Go to Dashboard
             <ArrowRight className="transition-all duration-300 group-hover:translate-x-1" />
           </Link>

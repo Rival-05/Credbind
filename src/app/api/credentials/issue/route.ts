@@ -5,11 +5,13 @@ import crypto from "crypto";
 
 const PINATA_ENDPOINT = "https://api.pinata.cloud/pinning/pinJSONToIPFS";
 
+type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+
 function generateCredentialId() {
     return `cert-${Date.now()}`;
 }
 
-function stableStringify(obj: any): string {
+function stableStringify(obj: JsonValue): string {
     if (obj === null || typeof obj !== "object") {
         return JSON.stringify(obj);
     }
@@ -62,11 +64,21 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json();
-        const { walletId, type, title, program, department, cgpa, graduationYear, expiresAt } = body;
+        const {
+            walletId,
+            type,
+            title,
+            program,
+            department,
+            cgpa,
+            graduationYear,
+            expiresAt,
+            additionalRemarks,
+        } = body;
 
-        if (!walletId || !type || !title) {
+        if (!walletId || !type || !title || !program || !department || !cgpa || !graduationYear) {
             return NextResponse.json(
-                { success: false, message: "walletId, type and title are required" },
+                { success: false, message: "walletId, type, title, program, department, cgpa, and graduationYear are required" },
                 { status: 400 }
             );
         }
@@ -99,11 +111,12 @@ export async function POST(req: NextRequest) {
                 enrollment: student.enrollment,
             },
             academic: {
-                program: program ?? null,
-                department: department ?? null,
-                cgpa: cgpa ?? null,
-                graduationYear: graduationYear ?? null,
+                program,
+                department,
+                cgpa,
+                graduationYear,
             },
+            remarks: additionalRemarks ?? null,
         };
 
         const canonical = stableStringify(
@@ -170,6 +183,11 @@ export async function POST(req: NextRequest) {
                     walletId: student.walletId,
                     type,
                     title,
+                    program,
+                    department,
+                    cgpa,
+                    graduationYear,
+                    additionalRemarks: additionalRemarks ?? null,
                 },
             },
         });

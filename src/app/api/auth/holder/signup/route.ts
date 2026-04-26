@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-
-function generateWalletId(enrollment: string) {
-    return `did:credbind:student-${enrollment.toLowerCase()}`;
-}
+import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
     try {
@@ -50,7 +47,7 @@ export async function POST(req: NextRequest) {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // 5. Generate wallet ID
-        const walletId = generateWalletId(normalizedEnrollment);
+        const walletId = `${crypto.randomBytes(8).toString("hex")}`;
 
         // 6. Create student
         const student = await prisma.student.create({

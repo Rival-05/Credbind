@@ -13,14 +13,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  generateKeyPair,
-  exportPublicKey,
-  exportPrivateKey,
-} from "@/lib/crypto";
-import { savePrivateKey } from "@/lib/walletStorage";
 import { sileo } from "sileo";
 import Link from "next/link";
+import { useAuthDashboardRedirect } from "@/lib/dashboardRedirect";
 
 type Role = "holder" | "issuer";
 
@@ -33,6 +28,9 @@ export default function Signupui() {
 
   const [role, setRole] = useState<Role>(initialRole);
   const [loading, setLoading] = useState(false);
+  const checkingSession = useAuthDashboardRedirect({
+    replace: (href) => router.replace(href),
+  });
 
   const [form, setForm] = useState<Record<string, string>>({
     name: "",
@@ -101,6 +99,17 @@ export default function Signupui() {
     } finally {
       setLoading(false);
     }
+  }
+
+  if (checkingSession) {
+    return (
+      <div className="bg-background flex min-h-screen w-full items-center justify-center">
+        <div className="flex items-center gap-2">
+          <Spinner className="fill-foreground h-5 w-5" />
+          <p className="text-muted-foreground text-sm">Checking session...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
